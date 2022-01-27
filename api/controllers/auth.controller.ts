@@ -30,14 +30,13 @@ export const authUser = async (req: Request, res:Response) => {
             return res.status(400).json({clientErr: 'invalid username or password'});
         }
     } catch (err) {
-        console.log('authUser: ',err)
+        console.log(err)
     }
 }
 
 export const verifyToken = async (req:Request, res:Response, next: NextFunction) => {
     try {
         const token = req.header('token')
-        console.log(token)
         if(token) {
             const decoded:any = verifyJWT(token)
             if(decoded){

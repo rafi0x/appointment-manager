@@ -44,7 +44,7 @@ export default {
   },
   methods: {
     async update() {
-      if(this.status && this.appointmentId) {
+      if(this.status && this.appointmentId && this.token) {
         const request = await fetch('http://localhost:8083/api/appointments',{
           method: "PUT",
           headers: {
@@ -63,7 +63,7 @@ export default {
       }
     },
     async deleteAppointment() {
-      if(this.appointmentId){
+      if(this.appointmentId && this.token){
         const request = await fetch('http://localhost:8083/api/appointments',{
           method: "DELETE",
           headers: {

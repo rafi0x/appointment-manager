@@ -204,7 +204,8 @@ export default {
     },
     authUser(){
       this.modals.loginModalShow = false
-      this.authToken  = localStorage.getItem('token');
+      this.authToken = localStorage.getItem('token');
+      console.log(this.authToken)
       this.isAdmin = true;
     },
     checkTokenExpire(){

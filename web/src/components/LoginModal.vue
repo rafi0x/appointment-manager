@@ -71,8 +71,8 @@ export default {
         })
         const response = await request.json()
         if(response.token){
-          this.$emit('userLoggedIn')
           localStorage.setItem('token', response.token)
+          this.$emit('userLoggedIn')
         } else {
           this.error = response.clientErr;
         }
