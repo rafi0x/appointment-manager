@@ -40,13 +40,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.addAppointment = exports.getAppointment = void 0;
-var appointment_schema_1 = __importDefault(require("../Schemas/appointment.schema"));
+var Appointment_schema_1 = __importDefault(require("../Schemas/Appointment.schema"));
 var utilities_1 = require("../utilities");
 var getAppointment = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var appointments;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, appointment_schema_1.default.find()];
+            case 0: return [4 /*yield*/, Appointment_schema_1.default.find()];
             case 1:
                 appointments = _a.sent();
                 if (appointments.length > 0) {
@@ -68,7 +68,7 @@ var addAppointment = function (req, res) { return __awaiter(void 0, void 0, void
                 _a = req.body, patientName = _a.patientName, contact = _a.contact, scheduled = _a.scheduled;
                 serial = (0, utilities_1.randomNumGen)(4);
                 if (!(patientName && contact && scheduled)) return [3 /*break*/, 2];
-                newData = new appointment_schema_1.default({
+                newData = new Appointment_schema_1.default({
                     patientName: patientName,
                     contact: contact,
                     scheduled: scheduled,
@@ -82,7 +82,7 @@ var addAppointment = function (req, res) { return __awaiter(void 0, void 0, void
                 else
                     return [2 /*return*/, res.status(500).json({ serverErr: "server error" })];
                 return [3 /*break*/, 3];
-            case 2: return [2 /*return*/, res.status(400).json({ inputErr: "invalid or blank input" })];
+            case 2: return [2 /*return*/, res.status(400).json({ clientErr: "invalid or blank input" })];
             case 3: return [2 /*return*/];
         }
     });

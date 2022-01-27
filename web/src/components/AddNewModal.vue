@@ -58,6 +58,12 @@
 <script>
 export default {
   name: "add-new",
+  props: {
+    token: {
+      type: String,
+      require: true
+    }
+  },
   data() {
     return {
       patientName: '',
@@ -70,7 +76,10 @@ export default {
       async saveAppointment() {
         const request = await fetch('http://localhost:8083/api/appointments', {
           method: "POST",
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'token': this.token
+          },
           body: JSON.stringify({
             patientName: this.patientName,
             contact: this.contact,

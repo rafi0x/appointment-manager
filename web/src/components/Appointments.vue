@@ -16,8 +16,8 @@
           <select class="border border-gray-300 rounded-md text-gray-600 h-9 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none" v-model="whatToShow">
             <option value="" disabled selected hidden>Filter</option>
             <option value="active">Active</option>
-            <option value="complete">Completed</option>
-            <option value="cancel">Cancelled</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
           </select>
         </div>
         <div class="inline-block rounded-md font-medium border border-solid cursor-pointer text-center ml-2 px-1.5 py-0 text-lg text-white bg-red-600 border-red-600 hover:bg-red-800 hover:border-red-800" v-if="whatToShow" @click="clearFilter">X</div>
@@ -49,6 +49,7 @@
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
             <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Patient Name
               </th>
@@ -70,30 +71,31 @@
             </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="(person, index) in showData(whatToShow)" :key="index" @click="openDetailsModal(index)">
-
-              <td class="px-6 py-4 whitespace-nowrap">
-
+            <tr v-for="(person, index) in showData(whatToShow)" :key="index" class="hover:bg-gray-100">
+              <td class="px-6 py-4 whitespace-nowrap cursor-pointer" @click="openDetailsModal(index)"></td>
+              <td class="px-6 py-4 whitespace-nowrap cursor-pointer" @click="openDetailsModal(index)">
                 <div class="text-sm font-medium text-gray-900">
                   {{ person.patientName }}
                 </div>
-
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 cursor-pointer" @click="openDetailsModal(index)">
                 <div class="text-sm text-gray-500">
                   {{ person.contact }}
                 </div>
               </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+              <td class="px-6 py-4 whitespace-nowrap cursor-pointer" @click="openDetailsModal(index)">
+                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"  :class="{'bg-yellow-100 text-yellow-800': person.status === 'Active', 'bg-green-100 text-green-800': person.status === 'Completed', 'bg-red-100 text-red-800': person.status === 'Cancelled'}">
                     {{ person.status }}
                   </span>
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 cursor-pointer" @click="openDetailsModal(index)">
                 {{ person.serial }}
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 cursor-pointer" @click="openDetailsModal(index)">
                 {{ person.scheduled ? person.scheduled.split('T')[0]: '' }}
+              </td>
+              <td v-if="isAdmin" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <Actions :appointmentId="person._id" @status-updated="getDataFromApi" @appointment-deleted="getDataFromApi" :token="authToken" :showDelete="person.status === 'Active'"/>
               </td>
 
             </tr>
@@ -104,27 +106,31 @@
       </div>
     </div>
 
-    <details-modal v-if="modals.detailsModalShow" :patientName="detailsModalData.name" :serialNumber="detailsModalData.serial" :contacts="detailsModalData.contact" :status="detailsModalData.status" @closeModal="modal.detailsModalShow = !modal.detailsModalShow;"/>
+    <details-modal v-if="modals.detailsModalShow" :patientName="detailsModalData.name" :serialNumber="detailsModalData.serial" :contacts="detailsModalData.contact" :status="detailsModalData.status" @closeModal="modals.detailsModalShow = !modals.detailsModalShow;"/>
 
     <login-modal v-if="modals.loginModalShow" @close-login-modal="modals.loginModalShow = !modals.loginModalShow" @userLoggedIn="authUser"/>
 
-    <add-new-modal v-if="modals.addNewModalShow" @close-add-new-modal="modals.addNewModalShow = !modals.addNewModalShow" @adding-success="reCallApi('addNewModalShow')"/>
+    <add-new-modal v-if="modals.addNewModalShow" :token="authToken" @close-add-new-modal="modals.addNewModalShow = !modals.addNewModalShow" @adding-success="reCallApi('addNewModalShow')"/>
 
   </div>
 
 </template>
 
 <script>
+import jwt_decode from 'jwt-decode';
 import DetailsModal from "./DetailsModal";
 import LoginModal from "./LoginModal";
 import AddNewModal from "./AddNewModal";
-import JwtDecode from 'vue-jwt-decode';
+import Actions from "@/components/Actions";
+
+
 export default {
   name: 'Appointments',
   components: {
     "details-modal":DetailsModal,
     "login-modal": LoginModal,
-    "add-new-modal": AddNewModal
+    "add-new-modal": AddNewModal,
+    Actions
   },
   data() {
     return {
@@ -198,16 +204,19 @@ export default {
     },
     authUser(){
       this.modals.loginModalShow = false
-      const token = localStorage.getItem('token');
+      this.authToken  = localStorage.getItem('token');
       this.isAdmin = true;
-      this.authToken = token;
     },
     checkTokenExpire(){
       const token = localStorage.getItem('token');
       if(token){
-        const decoded = JwtDecode(token);
+        const decoded = jwt_decode(token);
         if(decoded.expiresIn < Date.now()){
+          console.log('true')
           this.logout()
+        } else {
+          this.isAdmin = true;
+          this.authToken = token;
         }
       }
     },

@@ -12,21 +12,59 @@ export const getAppointment = async (req: Request, res: Response) => {
 }
 
 export const addAppointment = async (req: Request, res: Response) => {
-    const {patientName, contact, scheduled} = req.body;
-    const serial = randomNumGen(4);
-    if(patientName && contact && scheduled) {
-        const newData = new Appointment({
-            patientName,
-            contact,
-            scheduled,
-            serial
-        })
-        const savedData = await newData.save()
-        if(savedData) return res.status(200).json({success: 'data saved'})
-        else return res.status(500).json({serverErr: "server error"})
+    try {
+        const {patientName, contact, scheduled} = req.body;
+        const serial = randomNumGen(4);
+        if(patientName && contact && scheduled) {
+            const newData = new Appointment({
+                patientName,
+                contact,
+                scheduled,
+                serial
+            })
+            const savedData = await newData.save()
+            if(savedData) return res.status(200).json({success: 'data saved'})
+            else return res.status(500).json({serverErr: "server error"})
 
-    } else {
-        return res.status(400).json({clientErr: "invalid or blank input"})
+        } else {
+            return res.status(400).json({clientErr: "invalid or blank input"})
+        }
+    } catch (err) {
+        console.log(err)
+        throw new Error('ServerError')
     }
+}
 
+export const updateStatus = async (req:Request, res:Response) => {
+    try {
+        const {id, status} = req.body;
+        if(id && status){
+            await Appointment.findOneAndUpdate({_id: id},{
+                $set:{
+                    status
+                }
+            },{ useFindAndModify: false })
+            return res.status(200).json({success: 'status update success'})
+        } else {
+            return res.status(400).json({clientErr: "invalid or blank input"})
+        }
+    } catch (err) {
+        console.log(err)
+        throw new Error('ServerError')
+    }
+}
+
+export const deleteAppointment = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.body;
+        if(id) {
+            await Appointment.findOneAndDelete({_id: id});
+            return res.status(200).json({success: 'delete success'})
+        } else {
+            return res.status(400).json({clientErr: "invalid or blank input"})
+        }
+    } catch (err) {
+        console.log(err)
+        throw new Error('ServerError')
+    }
 }

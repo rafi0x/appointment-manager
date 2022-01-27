@@ -26,11 +26,11 @@ var dotenv = __importStar(require("dotenv"));
 var express_1 = __importDefault(require("express"));
 var mongoose_1 = __importDefault(require("mongoose"));
 var common_1 = __importDefault(require("./middlewares/common"));
-var index_1 = __importDefault(require("./routes/index"));
+var index_routes_1 = __importDefault(require("./routes/index.routes"));
 dotenv.config();
 var app = (0, express_1.default)();
 (0, common_1.default)(app);
-app.use('/api', index_1.default);
+app.use('/api', index_routes_1.default);
 mongoose_1.default.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/appointment')
     .then(function () {
     console.log("Database connected");
