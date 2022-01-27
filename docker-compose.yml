@@ -1,0 +1,30 @@
+version: '3'
+services:
+  api:
+    container_name: api
+    build: api
+    restart: always
+    volumes:
+      - ./api:/app/api
+    ports:
+      - "8083:8083"
+    external_links:
+      - mongo
+    expose:
+      - "8083"
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+  client:
+    container_name: web
+    build: web
+    restart: on-failure
+    volumes:
+      - ./web:/web
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    depends_on:
+      - api
