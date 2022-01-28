@@ -3,8 +3,8 @@ import fs from 'fs';
 import jwt from 'jsonwebtoken'
 import path from 'path'
 
-const privateKEY = fs.readFileSync(`${path.resolve(__dirname, '../credentials')}/private.key`, 'utf8')
-const publicKEY = fs.readFileSync(`${path.resolve(__dirname, '../credentials')}/public.key`, 'utf8')
+const privateKEY = fs.readFileSync(`${path.resolve(__dirname, '../../credentials')}/private.key`, 'utf8')
+const publicKEY = fs.readFileSync(`${path.resolve(__dirname, '../../credentials')}/public.key`, 'utf8')
 
 export interface Payload {
     name: String;
