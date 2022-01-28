@@ -12,7 +12,6 @@ export interface Payload {
     expiresIn: number;
 }
 
-
 export const generateJWT = (payload: Payload) => {
     return jwt.sign(payload, privateKEY, { algorithm: 'RS256'})
 }
