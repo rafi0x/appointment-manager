@@ -2,14 +2,12 @@
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
-import bodyParser from "body-parser";
 
 // middlewares array
 const middlewares: any[] = [
     cors(),
     morgan("dev"),
     express.json(),
-    bodyParser.json(),
     express.urlencoded({
         extended: true,
     }),

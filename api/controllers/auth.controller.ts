@@ -15,7 +15,7 @@ export const authUser = async (req: Request, res:Response) => {
                     const jwtPayload: Payload = {
                         name: userData.username,
                         isAdmin: true,
-                        expiresIn: Date.now() * 120, //expire in 1h
+                        expiresIn: new Date().setHours(new Date().getHours() + 2), //expire in 1h
                     }
                     const jwtToken = generateJWT(jwtPayload);
                     if(jwtToken) return res.json({token: jwtToken});

@@ -3,7 +3,7 @@ import express from 'express';
 import mongoose from 'mongoose'
 dotenv.config();
 
-import commonMiddleware from './middlewares/common'
+import commonMiddleware from './middlewares/common.middlewares'
 import routers from './routes/index.routes'
 
 const app: express.Application = express();
