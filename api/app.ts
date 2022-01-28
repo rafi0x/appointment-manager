@@ -18,7 +18,7 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/appointment
     .then(() => {
         console.log("Database connected");
         // main web server
-        app.listen(process.env.POST || '8083', () => console.log(`server on ${process.env.PORT || '8083'}`))
+        app.listen(process.env.PORT || '8083', () => console.log(`server on ${process.env.PORT || '8083'}`))
     })
     .catch((err) => console.log(err));
 
