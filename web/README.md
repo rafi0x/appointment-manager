@@ -1,4 +1,4 @@
-# rttx
+# Web-Client
 
 ## Project setup
 ```
