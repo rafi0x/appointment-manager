@@ -10,13 +10,13 @@
       </select>
     </div>
     <div class="w-auto relative inline-flex">
-      <button type="button" @click="update" class="py-2 ml-1.5 px-4 bg-green-600 hover:bg-green-700 focus:ring-green-500 focus:ring-offset-green-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
+      <button type="button" @click="update" class="py-1.5 ml-1.5 px-4 border border-green-500 hover:text-white hover:bg-green-500 focus:ring-green-500 focus:ring-offset-green-200 text-green-500 w-full transition ease-in duration-200 text-center text-base font-medium shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-full ">
         Update
       </button>
     </div>
   </div>
   <div class="w-auto relative inline-flex" v-if="!showDelete">
-    <button type="button" @click="deleteAppointment" class="py-2 ml-1.5 px-4 bg-red-500 hover:bg-red-700 focus:ring-red-500 focus:ring-offset-red-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
+    <button type="button" @click="deleteAppointment" class="py-1.5 ml-1.5 px-4 border-red-500 border hover:bg-red-500 hover:text-white focus:ring-red-500 focus:ring-offset-red-200 text-red-500 w-full transition ease-in duration-200 text-center text-base font-medium shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-full ">
       Delete
     </button>
   </div>

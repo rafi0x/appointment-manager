@@ -43,68 +43,36 @@
 
     </div>
 
-    <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-      <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-        <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-          <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-            <tr>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Patient Name
-              </th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Contact
-              </th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
-              </th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Serial
-              </th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Scheduled
-              </th>
-              <th v-if="isAdmin" scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Change Status
-              </th>
-            </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="(person, index) in showData(whatToShow)" :key="index" class="hover:bg-gray-100">
-              <td class="px-6 py-4 whitespace-nowrap cursor-pointer" @click="openDetailsModal(index)"></td>
-              <td class="px-6 py-4 whitespace-nowrap cursor-pointer" @click="openDetailsModal(index)">
-                <div class="text-sm font-medium text-gray-900">
-                  {{ person.patientName }}
-                </div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 cursor-pointer" @click="openDetailsModal(index)">
-                <div class="text-sm text-gray-500">
-                  {{ person.contact }}
-                </div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap cursor-pointer" @click="openDetailsModal(index)">
+    <table-view :isAdmin="isAdmin">
+      <tr v-for="(person, index) in showData(whatToShow)" :key="index" class="hover:bg-gray-100">
+        <td class="px-6 py-4 whitespace-nowrap cursor-pointer" @click="openDetailsModal(index)"></td>
+        <td class="px-6 py-4 whitespace-nowrap cursor-pointer" @click="openDetailsModal(index)">
+          <div class="text-sm font-medium text-gray-900">
+            {{ person.patientName }}
+          </div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 cursor-pointer" @click="openDetailsModal(index)">
+          <div class="text-sm text-gray-500">
+            {{ person.contact }}
+          </div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap cursor-pointer" @click="openDetailsModal(index)">
                   <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"  :class="{'bg-yellow-100 text-yellow-800': person.status === 'Active', 'bg-green-100 text-green-800': person.status === 'Completed', 'bg-red-100 text-red-800': person.status === 'Cancelled'}">
                     {{ person.status }}
                   </span>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 cursor-pointer" @click="openDetailsModal(index)">
-                {{ person.serial }}
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 cursor-pointer" @click="openDetailsModal(index)">
-                {{ person.scheduled ? person.scheduled.split('T')[0]: '' }}
-              </td>
-              <td v-if="isAdmin" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                <Actions :appointmentId="person._id" @status-updated="getDataFromApi" @appointment-deleted="getDataFromApi" :token="authToken" :showDelete="person.status === 'Active'"/>
-              </td>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 cursor-pointer" @click="openDetailsModal(index)">
+          {{ person.serial }}
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 cursor-pointer" @click="openDetailsModal(index)">
+          {{ person.scheduled ? person.scheduled.split('T')[0]: '' }}
+        </td>
+        <td v-if="isAdmin" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          <Actions :appointmentId="person._id" @status-updated="getDataFromApi" @appointment-deleted="getDataFromApi" :token="authToken" :showDelete="person.status === 'Active'"/>
+        </td>
 
-            </tr>
-            </tbody>
-          </table>
-
-        </div>
-      </div>
-    </div>
+      </tr>
+    </table-view>
 
     <details-modal v-if="modals.detailsModalShow" :patientName="detailsModalData.name" :serialNumber="detailsModalData.serial" :contacts="detailsModalData.contact" :status="detailsModalData.status" @closeModal="modals.detailsModalShow = !modals.detailsModalShow;"/>
 
@@ -122,7 +90,7 @@ import DetailsModal from "./DetailsModal";
 import LoginModal from "./LoginModal";
 import AddNewModal from "./AddNewModal";
 import Actions from "@/components/Actions";
-
+import TableView from "@/components/TableView";
 
 export default {
   name: 'Appointments',
@@ -130,6 +98,7 @@ export default {
     "details-modal":DetailsModal,
     "login-modal": LoginModal,
     "add-new-modal": AddNewModal,
+    "table-view": TableView,
     Actions
   },
   data() {
