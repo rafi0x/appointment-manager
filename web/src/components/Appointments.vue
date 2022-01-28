@@ -68,9 +68,13 @@
           {{ person.scheduled ? person.scheduled.split('T')[0]: '' }}
         </td>
         <td v-if="isAdmin" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-          <Actions :appointmentId="person._id" @status-updated="getDataFromApi" @appointment-deleted="getDataFromApi" :token="authToken" :showDelete="person.status === 'Active'"/>
+          <Actions :appointmentId="person._id" @status-updated="getDataFromApi" @appointment-deleted="getDataFromApi" :showDelete="person.status !== 'Active'"/>
         </td>
 
+      </tr>
+
+      <tr v-if="!people">
+        <td colspan="8" class="text-center py-5 text-gray-500">No Appointment yet</td>
       </tr>
     </table-view>
 
@@ -78,7 +82,7 @@
 
     <login-modal v-if="modals.loginModalShow" @close-login-modal="modals.loginModalShow = !modals.loginModalShow" @userLoggedIn="authUser"/>
 
-    <add-new-modal v-if="modals.addNewModalShow" :token="authToken" @close-add-new-modal="modals.addNewModalShow = !modals.addNewModalShow" @adding-success="reCallApi('addNewModalShow')"/>
+    <add-new-modal v-if="modals.addNewModalShow" @close-add-new-modal="modals.addNewModalShow = !modals.addNewModalShow" @adding-success="reCallApi('addNewModalShow')"/>
 
   </div>
 
@@ -124,15 +128,19 @@ export default {
   computed: {
     //search with name and contact
     filteredList() {
-      return this.people.filter(post => {
-        return post.patientName.toLowerCase().includes(this.search.toLowerCase()) || post.contact.toLowerCase().includes(this.search.toLowerCase())
-      })
+      if(this.people){
+        return this.people.filter(post => {
+          return post.patientName.toLowerCase().includes(this.search.toLowerCase()) || post.contact.toLowerCase().includes(this.search.toLowerCase())
+        })
+      } else return false;
     },
     //sort by status
     sortActive: function () {
-      return this.people.filter(post => {
-        return post.status.toLowerCase() === this.whatToShow;
-      })
+      if(this.people) {
+        return this.people.filter(post => {
+          return post.status.toLowerCase() === this.whatToShow;
+        })
+      } else return false;
     }
   },
   methods: {
@@ -199,3 +207,15 @@ export default {
 }
 
 </script>
+
+
+
+
+
+
+
+
+
+
+
+// div.c16H9d > a div.c3gUW0 > span

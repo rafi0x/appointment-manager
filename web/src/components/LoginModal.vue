@@ -29,8 +29,10 @@
                         </span>
                 <input type="password" v-model="password" class=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent" placeholder="Password"/>
               </div>
+              <span class="text-red-500 text-center font-serif">{{error}}</span>
             </div>
             <div class="flex w-full mt-8">
+
               <button type="button" @click="$emit('close-login-modal')" class="py-2 mr-1.5 px-4 bg-red-600 hover:bg-red-700 focus:ring-red-500 focus:ring-offset-red-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
                 Close
               </button>
@@ -55,11 +57,13 @@ export default {
   data() {
     return {
       username: '',
-      password: ''
+      password: '',
+      error: ''
     }
   },
   methods: {
     async login() {
+      this.error = ''
       if(this.username && this.password){
         const request = await fetch('http://localhost:8083/api/auth',{
           method: "POST",

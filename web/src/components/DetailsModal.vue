@@ -16,9 +16,9 @@
                 <div class="text-gray-600 text-md mr-10">
                   Patient Name:
                 </div>
-                <div class="font-medium">
+                <p class="font-medium">
                   {{ name }}
-                </div>
+                </p>
               </div>
             </li>
             <li class="flex flex-row">
@@ -26,19 +26,19 @@
                 <div class="text-gray-600 text-md mr-10">
                   Serial Number:
                 </div>
-                <div class="font-medium">
+                <p class="font-medium">
                   {{ serial }}
-                </div>
+                </p>
               </div>
             </li>
             <li class="flex flex-row">
               <div class="select-none flex flex-1 items-center p-4">
                 <div class="text-gray-600 text-md mr-10">
-                  Contact:
+                  Contact Number:
                 </div>
-                <div class="font-medium">
+                <a class="font-medium" :href="`tel:${contact}`">
                   {{ contact }}
-                </div>
+                </a>
               </div>
             </li>
             <li class="flex flex-row">

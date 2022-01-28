@@ -1,4 +1,5 @@
 import {Request, Response} from 'express';
+import {validationResult} from 'express-validator'
 import Appointment, {AppointmentInterface} from '../Schemas/Appointment.schema'
 import { randomNumGen } from "../utilities";
 
@@ -12,10 +13,16 @@ export const getAppointment = async (req: Request, res: Response) => {
 }
 
 export const addAppointment = async (req: Request, res: Response) => {
-    try {
-        const {patientName, contact, scheduled} = req.body;
-        const serial = randomNumGen(4);
-        if(patientName && contact && scheduled) {
+    const inputErr = validationResult(req);
+    if (!inputErr.isEmpty()) {
+        return res.status(400).json({
+            clientErr: inputErr.mapped(),
+        });
+    } else {
+        try {
+            const {patientName, contact, scheduled} = req.body;
+            console.log('in try')
+            const serial = randomNumGen(4);
             const newData = new Appointment({
                 patientName,
                 contact,
@@ -23,15 +30,14 @@ export const addAppointment = async (req: Request, res: Response) => {
                 serial
             })
             const savedData = await newData.save()
-            if(savedData) return res.status(200).json({success: 'data saved'})
-            else return res.status(500).json({serverErr: "server error"})
 
-        } else {
-            return res.status(400).json({clientErr: "invalid or blank input"})
+            if(savedData) return res.status(200).json({success: 'data saved'})
+            else return res.status(500).json({serverErr: "ServerError"})
+
+        } catch (err) {
+            console.log(err)
+            throw new Error('ServerError')
         }
-    } catch (err) {
-        console.log(err)
-        throw new Error('ServerError')
     }
 }
 

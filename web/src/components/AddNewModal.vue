@@ -18,17 +18,20 @@
           <div class="mt-6">
             <div class="w-full space-y-6">
               <div class="w-full">
-                <div class=" relative ">
+                <div class=" relative">
+                  <span v-if="errors.patientName" class="text-red-500 font-normal font-serif">{{ errors.patientName.msg }}</span>
                   <input type="text" v-model="patientName" class=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent" placeholder="Patient Name"/>
                 </div>
               </div>
               <div class="w-full">
                 <div class=" relative ">
-                  <input type="text" v-model="contact" class=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent" placeholder="Patient Contact"/>
+                  <span v-if="errors.contact" class="text-red-500 font-normal font-serif">{{ errors.contact.msg }}</span>
+                  <input type="text" v-model="contact" class=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent" placeholder="Patient Contact Number"/>
                 </div>
               </div>
               <div class="w-full">
                 <div class=" relative ">
+                  <span v-if="errors.scheduled" class="text-red-500 font-normal font-serif">{{ errors.scheduled.msg }}</span>
                   <input type="date" v-model="scheduled" class=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent"/>
                 </div>
               </div>
@@ -58,22 +61,29 @@
 <script>
 export default {
   name: "add-new",
-  props: {
-    token: {
-      type: String,
-      require: true
-    }
-  },
   data() {
     return {
       patientName: '',
       contact: '',
       scheduled: '',
+      token: '',
       errors: {}
     }
   },
   methods: {
+    getToken() {
+      const authToken = localStorage.getItem('token');
+      if(authToken) {
+        this.token = authToken;
+      } else {
+        this.errors = {
+          msg: 'Token not found, Please Login again!'
+        }
+      }
+    },
       async saveAppointment() {
+        this.errors = {};
+        this.getToken()
         const request = await fetch('http://localhost:8083/api/appointments', {
           method: "POST",
           headers: {
@@ -88,13 +98,11 @@ export default {
         })
         const response = await request.json();
         if(response.success){
+          this.errors = {}
           this.$emit('adding-success')
         } else if (response.clientErr) {
-          this.errors = {
-            name: 'Name required',
-            contact: 'Contact required',
-            scheduled: 'Date required'
-          }
+          this.errors = response.clientErr
+          console.log(this.errors)
         } else {
           this.errors = {
             err: 'Server error, please try again'
