@@ -16,6 +16,13 @@ services:
     image: mongo
     ports:
       - "27017:27017"
+  seed-db:
+    container_name: seed-db
+    build: ./seed-db
+    links:
+      - mongo
+    depends_on:
+      - mongo
   client:
     container_name: web
     build: web

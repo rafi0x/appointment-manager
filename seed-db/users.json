@@ -1,0 +1,11 @@
+[{
+  "_id": {
+    "$oid": "61f2960f5fe8f31203bbcfbf"
+  },
+  "username": "admin",
+  "password": "$2b$10$BHcqNHMCov8XHm8L4yc.AO.nx9aJ/ZKXNH2bzB4HX4p8DnFifocVu",
+  "createdAt": {
+    "$date": "2022-01-27T12:54:38.624Z"
+  },
+  "__v": 0
+}]
