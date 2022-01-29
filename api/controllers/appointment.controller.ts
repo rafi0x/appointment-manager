@@ -21,7 +21,6 @@ export const addAppointment = async (req: Request, res: Response) => {
     } else {
         try {
             const {patientName, contact, scheduled} = req.body;
-            console.log('in try')
             const serial = randomNumGen(4);
             const newData = new Appointment({
                 patientName,

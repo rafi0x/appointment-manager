@@ -108,7 +108,6 @@ export default {
   data() {
     return {
       isAdmin: false,
-      authToken: '',
       search: '',
       whatToShow: '',
       modals: {
@@ -123,7 +122,7 @@ export default {
   async mounted() {
     //call the api
     await this.getDataFromApi()
-    this.checkTokenExpire()
+    this.authUser()
   },
   computed: {
     //search with name and contact
@@ -181,20 +180,14 @@ export default {
     },
     authUser(){
       this.modals.loginModalShow = false
-      this.authToken = localStorage.getItem('token');
-      console.log(this.authToken)
-      this.isAdmin = true;
-    },
-    checkTokenExpire(){
       const token = localStorage.getItem('token');
       if(token){
         const decoded = jwt_decode(token);
         if(decoded.expiresIn < Date.now()){
-          console.log('true')
+          this.isAdmin = false;
           this.logout()
         } else {
           this.isAdmin = true;
-          this.authToken = token;
         }
       }
     },
