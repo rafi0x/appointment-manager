@@ -23,7 +23,7 @@
         <div class="inline-block rounded-md font-medium border border-solid cursor-pointer text-center ml-2 px-1.5 py-0 text-lg text-white bg-red-600 border-red-600 hover:bg-red-800 hover:border-red-800" v-if="whatToShow" @click="clearFilter">X</div>
       </div>
 
-      <div class="max-w-md inline-flex">
+      <div class="max-w-md flex">
         <span v-if="isAdmin" class="text-white font-black">Hello Admin</span>
         <div class="ml-5 flex w-full">
           <button v-if="isAdmin" @click="modals.addNewModalShow = !modals.addNewModalShow" type="button" class="py-2 px-4 mr-3  bg-white focus:ring-green-500 focus:ring-offset-green-200 text-black w-full transition ease-in duration-200 text-center text-base font-medium shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-md">
@@ -200,15 +200,3 @@ export default {
 }
 
 </script>
-
-
-
-
-
-
-
-
-
-
-
-// div.c16H9d > a div.c3gUW0 > span

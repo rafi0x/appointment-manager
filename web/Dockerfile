@@ -1,18 +1,19 @@
-FROM node:16.13.0-alpine
+FROM node:12-alpine
 
 WORKDIR /web
 
 #RUN yarn global add http-server
+RUN npm i --global http-server
 
-COPY package.json ./
-COPY yarn.lock ./
+COPY package*.json ./
+#COPY yarn.lock ./
 
-RUN yarn
-#RUN yarnn build
+RUN npm ci
+RUN npm run build
 
 COPY . .
 
 EXPOSE 8080
 
-#CMD ["http-server","dist"]
-CMD ["yarn","serve"]
+CMD ["http-server","dist"]
+#CMD ["npm","run","serve"]
